@@ -7,6 +7,7 @@ The immediate goal of this project is to try to get to a Product as quickly as p
 [] Firebase - so we can quickly get things up and running without a Database.  Also, just because we want to do it as a proof of concept.
 
 [] Modular - for ease of update, maintenance, and for the "What if" questions.
+
     * What if we want to switch out Firebase?
     * What if we want to add more stuff?
     * What if ...?

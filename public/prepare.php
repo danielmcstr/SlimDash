@@ -28,7 +28,7 @@ $dotenv = new Dotenv\Dotenv(APP_PATH);
 $dotenv->load();
 
 // App settings
-$appSettings = require APP_PATH . '/modules/settings.php';
+$appSettings = require APP_PATH . '/src/settings.php';
 
 //die(json_encode($settings));
 $app = new \SlimDash\Core\SlimDashApp($appSettings);

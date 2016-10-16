@@ -5,6 +5,10 @@
     "prefer-stable": true,
     "repositories": [
         {
+            "url": "https://github.com/slimdash/core.git",
+            "type": "git"
+        },
+        {
             "url": "https://github.com/slimdash/php-helpers.git",
             "type": "git"
         }
@@ -19,7 +23,7 @@
         "symfony/http-foundation": "^3.1",
         "symfony/translation": "^3.1",
         "symfony/twig-bridge": "^3.1",
-        "slimdash/php-helpers": "dev-master",
+        "slimdash/core": "dev-master",
         "tuupola/slim-jwt-auth": "^2.3",
         "vlucas/phpdotenv": "^2.4"
     },
@@ -30,8 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "AppMain\\": "modules/AppMain/src/",
-            "SlimDash\\Core\\": "src/core/"
+            "AppMain\\": "src/"
         }
     }
 }
