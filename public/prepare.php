@@ -10,21 +10,21 @@ defined('APP_ENV')
 
 // enable debug
 if (APP_ENV !== 'prd') {
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL | E_STRICT);
+    ini_set('display_errors', 'On');
+    error_reporting(E_ALL | E_STRICT);
 }
 
 if (PHP_SAPI === 'cli-server') {
-	// To help the built-in PHP dev server, check if the request was actually for
-	// something which should probably be served as a static file
-	$file = __DIR__ . $_SERVER['REQUEST_URI'];
-	if (is_file($file)) {
-		return false;
-	}
+    // To help the built-in PHP dev server, check if the request was actually for
+    // something which should probably be served as a static file
+    $file = __DIR__ . $_SERVER['REQUEST_URI'];
+    if (is_file($file)) {
+        return false;
+    }
 }
 
 $classLoader = require APP_PATH . '/vendor/autoload.php';
-$dotenv = new Dotenv\Dotenv(APP_PATH);
+$dotenv      = new Dotenv\Dotenv(APP_PATH);
 $dotenv->load();
 
 // App settings
