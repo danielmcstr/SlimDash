@@ -1,10 +1,6 @@
-/node_modules/
-/data/
-.DS_Store
-/temp/
-/logs/
-
-# obvious folders
-/vendor/
-/.phpintel/
+.DS_STORE
+.phpintel/
+.env
+vendor/
 *.lock
+*.log
