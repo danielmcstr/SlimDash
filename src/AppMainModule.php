@@ -77,6 +77,10 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
 
             return $session->getSegment($settings['namespace']);
         };
+
+        $container["jwt"] = function ($container) {
+            return new StdClass;
+        };
     }
 
     /**
@@ -92,11 +96,14 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
      */
     public function initRoutes(\SlimDash\Core\SlimDashApp $app)
     {
+        $container = $app->getContainer();
+
         $jwtAuth = new \SlimDash\Core\FirebaseAuth([
             "path"        => "/",
             "passthrough" => [
                 "/login",
-                "/auth/firebase"],
+                "/auth/firebase"
+            ],
             "cookie"      => env('AUTH_COOKIE', 'myfbtk'),
             "attribute"   => "jwt",
             "error"       => function ($request, $response, $arguments) {
@@ -109,10 +116,9 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
                     ->withHeader("Content-Type", "application/json")
                     ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
             },
-            "callback"    => function () {
-                // store user
-                // get roles and modules from firebase if not exists
-            },
+            "callback"    => function ($request, $response, $arguments) use ($container) {
+                $container["jwt"] = $arguments["decoded"];
+            }
         ]);
 
         $app->add($jwtAuth);

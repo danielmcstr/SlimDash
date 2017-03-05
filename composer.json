@@ -22,7 +22,8 @@
         "symfony/twig-bridge": "^3.2",
         "slimdash/core": "dev-master",
         "vlucas/phpdotenv": "^2.4",
-        "monolog/monolog": "^1.22"
+        "monolog/monolog": "^1.22",
+        "adrorocker/php-firebase": "^0.2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.5",
