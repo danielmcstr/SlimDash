@@ -1,7 +1,7 @@
 <?php
 namespace AppMain\Controller;
 
-class HomeController extends \SlimDash\Core\SlimDashController
+class HomeController extends BaseController
 {
     public function getLogin()
     {
