@@ -1,0 +1,42 @@
+[% extends '@theme/shared/base.html.twig' %]
+
+[% block title %]Logout[% endblock %]
+
+[% block body_params %]class="hold-transition login-page"[% endblock %]
+
+[% block body %]
+<div class="login-box">
+  <div class="login-logo">
+    <b>example</b> console
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Thank you for using example console!</p>
+
+    <p><a href="/login">Click here to login</a></p>
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+<!-- /.login-box -->
+[% endblock %]
+
+[% block footer %]
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBlB-rAiulzhN59_VqCUYthK37-cSPcrgc",
+    authDomain: "brick-admin.firebaseapp.com",
+    databaseURL: "https://brick-admin.firebaseio.com",
+    storageBucket: "brick-admin.appspot.com",
+    messagingSenderId: "1067107688359"
+  };
+  firebase.initializeApp(config);
+</script>
+<script>
+    function initApp() {
+      firebase.auth().signOut();
+    }
+    $(document).ready(initApp);
+</script>
+[% endblock %]

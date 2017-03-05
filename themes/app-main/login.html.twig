@@ -1,0 +1,144 @@
+[% extends '@theme/shared/base.html.twig' %]
+
+[% block title %]Login[% endblock %]
+
+[% block body_params %]class="hold-transition login-page"[% endblock %]
+
+[% block body %]
+<div class="login-box">
+  <div class="login-logo">
+    <b>example</b> console
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Sign in to start your session</p>
+
+    <form role="form" action="#" onsubmit="return firebaseLogin();" method="post">
+      <div class="form-group has-feedback">
+        <input id="email" type="email" class="form-control" placeholder="Email">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input id="password" type="password" class="form-control" placeholder="Password">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <input type="checkbox"> Remember Me
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat" id="btn-sign-in">Sign In</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+[% endblock %]
+
+[% block footer %]
+<script>
+  $(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue',
+      increaseArea: '20%' // optional
+    });
+  });
+</script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBlB-rAiulzhN59_VqCUYthK37-cSPcrgc",
+    authDomain: "brick-admin.firebaseapp.com",
+    databaseURL: "https://brick-admin.firebaseio.com",
+    storageBucket: "brick-admin.appspot.com",
+    messagingSenderId: "1067107688359"
+  };
+  firebase.initializeApp(config);
+</script>
+<script>
+  function firebaseLogin() {
+    if (firebase.auth().currentUser) {
+        // [START signout]
+        firebase.auth().signOut();
+        // [END signout]
+      } 
+      else {
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        if (email.length < 4) {
+          alert('Please enter an email address.');
+          return;
+        }
+        if (password.length < 4) {
+          alert('Please enter a password.');
+          return;
+        }
+        
+        // Sign in with email and pass.
+        // [START authwithemail]
+        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // [START_EXCLUDE]
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+          }
+          console.log(error);
+          document.getElementById('btn-sign-in').disabled = false;
+          // [END_EXCLUDE]
+        });
+        // [END authwithemail]
+      }
+      document.getElementById('btn-sign-in').disabled = true;
+      return false;
+  }
+   /**
+     * initApp handles setting up UI event listeners and registering Firebase auth listeners:
+     *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
+     *    out, and that is where we update the UI.
+     */
+    function initApp() {
+      // Listening for auth state changes.
+      // [START authstatelistener]
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // User is signed in.
+          var displayName = user.displayName;
+          var email = user.email;
+          var emailVerified = user.emailVerified;
+          var photoURL = user.photoURL;
+          var isAnonymous = user.isAnonymous;
+          var uid = user.uid;
+          var providerData = user.providerData;
+          console.log(user.providerData);
+          if (!user.isAnonymous) {
+            user.getToken().then(function(token){
+              document.location = '/auth/firebase/?token=' + token;
+            });
+          }
+          // redirect to dashboard
+        } else {
+          // User is signed out.
+          // redirect to login?
+        }
+        // [START_EXCLUDE silent]
+        document.getElementById('btn-sign-in').disabled = false;
+        // [END_EXCLUDE]
+      });
+    }
+    $(document).ready(initApp);
+</script>
+[% endblock %]

@@ -36,6 +36,7 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
             if (isset($settings['cache'])) {
                 $parms['cache'] = $settings['cache'];
             }
+
             $view = new \Slim\Views\Twig($folders, $twigExtra);
 
             // Instantiate and add Slim specific extension
@@ -48,6 +49,14 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
             // Add the TranslationExtension to the view
             $view->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension($translator));
 
+            $twig = $view->getEnvironment();
+            $lexer = new \Twig_Lexer($twig, array(
+                'tag_comment'   => array('[#', '#]'),
+                'tag_block'     => array('[%', '%]'),
+                'tag_variable'  => array('[[', ']]'),
+                'interpolation' => array('#[', ']'),
+            ));
+            $twig->setLexer($lexer);
             return $view;
         };
 
@@ -86,15 +95,15 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
         $jwtAuth = new \SlimDash\Core\FirebaseAuth([
             "path"        => "/",
             "passthrough" => [
-                "/app-main/login",
-                "/app-main/auth/firebase"],
+                "/login",
+                "/auth/firebase"],
             "cookie"      => env('AUTH_COOKIE', 'myfbtk'),
             "attribute"   => "jwt",
             "error"       => function ($request, $response, $arguments) {
                 $data["status"]  = "error";
                 $data["message"] = $arguments["message"];
                 if ($data["message"] == 'Token not found') {
-                    return $response->withRedirect('/app-main/login', 403);
+                    return $response->withRedirect('/login', 403);
                 }
                 return $response
                     ->withHeader("Content-Type", "application/json")
@@ -109,11 +118,12 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
         $app->add($jwtAuth);
         // set default url right now
         $ctrl = \AppMain\Controller\HomeController::class;
+
         // var_dump($ctrl);
         $app->route(['get'], '/', $ctrl, 'Dashboard')->setName('home');
-        $app->route(['get'], '/app-main/login', $ctrl, 'Login')->setName('login');
-        $app->route(['get'], '/app-main/logout', $ctrl, 'Logout')->setName('logout');
-        $app->route(['get'], '/app-main/auth/firebase/', $ctrl, 'AuthFirebase')->setName('auth-firebase');
-        $app->route(['get'], '/app-main/dash', $ctrl, 'Dashboard')->setName('dash');
+        $app->route(['get'], '/login', $ctrl, 'Login')->setName('login');
+        $app->route(['get'], '/logout', $ctrl, 'Logout')->setName('logout');
+        $app->route(['get'], '/auth/firebase/', $ctrl, 'AuthFirebase')->setName('auth-firebase');
+        $app->route(['get'], '/main', $ctrl, 'Dashboard')->setName('dash');
     }
 }
