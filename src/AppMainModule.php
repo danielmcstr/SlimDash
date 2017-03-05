@@ -130,7 +130,6 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
         $app->route(['get'], '/login', $ctrl, 'Login')->setName('login');
         $app->route(['get'], '/logout', $ctrl, 'Logout')->setName('logout');
         $app->route(['get'], '/auth/firebase/', $ctrl, 'AuthFirebase')->setName('auth-firebase');
-        $app->route(['get'], '/main', $ctrl, 'Dashboard')->setName('dash');
 
         $ctrl = \AppMain\Controller\ProjectController::class;
         // projects and modules

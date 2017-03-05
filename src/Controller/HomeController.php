@@ -16,17 +16,8 @@ class HomeController extends BaseController
 
     public function getDashboard()
     {
-        // Base endpoint
-        $base = 'https://brick-admin.firebaseio.com';
-
-        // Auth token
-        $token = $_COOKIE[env('AUTH_COOKIE', 'myfbtk')];
-
-        // get list of projects
-        $rsp = $this->execJsonRequest($base . '/projects.json', [], ["auth" => $token]); 
-        $projs = $rsp["body"];
+        $projs = $this->fetchProjects();
         $filtered = [];
-
 
         // filter out projects user does not have permission to
         foreach ($projs as $project => $value) {
@@ -34,7 +25,6 @@ class HomeController extends BaseController
                 $filtered[$project] = $value;
             }
         } 
-        
         $this->render('@theme/main.html', ["projects" => json_encode($filtered)]);
     }
 
@@ -44,6 +34,6 @@ class HomeController extends BaseController
         setcookie(env('AUTH_COOKIE', 'myfbtk'), $token, time() + 3600, '/');
 
         // redirect to dashboard
-        return $this->response->withRedirect('/main');
+        return $this->response->withRedirect('@home');
     }
 }

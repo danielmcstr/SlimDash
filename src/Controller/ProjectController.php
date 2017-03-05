@@ -3,37 +3,69 @@ namespace AppMain\Controller;
 
 class ProjectController extends BaseController
 {
+    public function fetchMyModules($project) 
+    {
+        $modules = $this->getModules();
+        $filtered = []
+
+        foreach ($modules as $module => $value) 
+        {
+            if (isset($project['modules'][$value]))
+            {
+                // if module has been excluded, skip module
+                $mod = $project['modules'][$value];
+                if (isset($mod["excluded"])) {
+                    continue;
+                }
+            }
+
+            $filtered[$module] = $value;
+        }
+
+        return $filtered;
+    }
+
     public function getProject($code)
     {
-        /*
-        // Base endpoint
-        $base = 'https://brick-admin.firebaseio.com';
+        // get all project, validate user has access to project
+        $projs = $this->fetchProjects();
 
-        // Auth token
-        $token = $_COOKIE[env('AUTH_COOKIE', 'myfbtk')];
+        if (isset($projs[$code]) && isset($projs[$code]['members'][$this->jwt->sub])) 
+        {
+            $project = $projs[$code];
+            $filtered = $this->filterMyModules($project)
 
-        // get list of modules
-        $rsp = $this->execJsonRequest($base . '/modules.json', [], ["auth" => $token]); 
-        $projs = $rsp["body"];
-        $filtered = [];
+            $this->render('@theme/project.html', [
+                "code" => $code, 
+                "project" => json_encode($project),
+                "modules" => json_encode($filtered),
+            ]);
+        }
 
-        // filter out modules user does not have permission to
-        foreach ($projs as $project => $value) {
-            if (isset($value["members"][$this->jwt->sub])){
-                $filtered[$project] = $value;
-            }
-        } 
-        
-        $this->render('@theme/project.html', ["modules" => json_encode($filtered)]);
-        */
-
-        // get project, validate user has access to project
-        $this->render('@theme/project.html', ["code" => $code]);
+        // redirect dashboard if user does not have access to project
+        return $this->response->withRedirect("@home");
     }
 
 
     public function getProjectModule($code, $module)
     {
-        $this->render("/view/module/$module/index.html", ["code" => $code]);
+        // get all project, validate user has access to project
+        $projs = $this->fetchProjects();
+
+        if (isset($projs[$code]) && isset($projs[$code]['members'][$this->jwt->sub])) 
+        {
+            $project = $projs[$code];
+            $filtered = $this->filterMyModules($project)
+
+            $this->render("/view/$module/index.html", [
+                "code" => $code, 
+                "project" => json_encode($project),
+                "modules" => json_encode($filtered),
+                "module" => json_encode($filtered[$module]),
+            ]);
+        }
+
+        // redirect to project home if user does not have access to module
+        return $this->response->withRedirect("/project/$code");
     }
 }
