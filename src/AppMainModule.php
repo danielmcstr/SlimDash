@@ -134,6 +134,7 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
 
         $ctrl = \AppMain\Controller\ProjectController::class;
         // projects and modules
-        $app->route(['get'], '/project/{code}', $ctrl, 'Dashboard')->setName('manage-project');
+        $app->route(['get'], '/project/{code}', $ctrl, 'Project')->setName('manage-project');
+        $app->route(['get'], '/project/{code}/{module}', $ctrl, 'ProjectModule')->setName('manage-project-module');
     }
 }

@@ -6,6 +6,7 @@ return [
         // Renderer settings
         'renderer'               => [
             'folders' => [
+                '__main__' => APP_PATH . '/public',
                 'theme' => APP_PATH . '/themes/app-main',
             ],
             'ext'     => 'twig',

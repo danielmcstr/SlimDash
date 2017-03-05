@@ -3,7 +3,7 @@ namespace AppMain\Controller;
 
 class ProjectController extends BaseController
 {
-    public function getDashboard($code)
+    public function getProject($code)
     {
         /*
         // Base endpoint
@@ -29,5 +29,11 @@ class ProjectController extends BaseController
 
         // get project, validate user has access to project
         $this->render('@theme/project.html', ["code" => $code]);
+    }
+
+
+    public function getProjectModule($code, $module)
+    {
+        $this->render("/view/module/$module/index.html", ["code" => $code]);
     }
 }
