@@ -43,7 +43,7 @@ class ProjectController extends BaseController
         }
 
         // redirect dashboard if user does not have access to project
-        return $this->response->withRedirect("@home");
+        return $this->response->withRedirect("/");
     }
 
 

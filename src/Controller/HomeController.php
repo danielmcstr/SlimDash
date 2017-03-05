@@ -10,7 +10,7 @@ class HomeController extends BaseController
 
     public function getLogout()
     {
-        setcookie(env('AUTH_COOKIE', 'myfbtk'), null, -1, '/');
+        setcookie(getenv('AUTH_COOKIE'), null, -1, '/');
         $this->render('@theme/logout.html');
     }
 
@@ -31,9 +31,9 @@ class HomeController extends BaseController
     public function getAuthFirebase()
     {
         $token = $this->queryParam('token');
-        setcookie(env('AUTH_COOKIE', 'myfbtk'), $token, time() + 3600, '/');
+        setcookie(getenv('AUTH_COOKIE'), $token, time() + 3600, '/');
 
         // redirect to dashboard
-        return $this->response->withRedirect('@home');
+        return $this->response->withRedirect('/');
     }
 }

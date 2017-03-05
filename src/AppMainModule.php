@@ -104,7 +104,7 @@ class AppMainModule extends \SlimDash\Core\SlimDashModule
                 "/login",
                 "/auth/firebase"
             ],
-            "cookie"      => env('AUTH_COOKIE', 'myfbtk'),
+            "cookie"      => getenv('AUTH_COOKIE'),
             "attribute"   => "jwt",
             "error"       => function ($request, $response, $arguments) {
                 $data["status"]  = "error";

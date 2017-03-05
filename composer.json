@@ -7,10 +7,6 @@
         {
             "url": "https://github.com/slimdash/core.git",
             "type": "git"
-        },
-        {
-            "url": "https://github.com/slimdash/php-helpers.git",
-            "type": "git"
         }
     ],
 
