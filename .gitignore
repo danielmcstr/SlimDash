@@ -4,3 +4,4 @@
 vendor/
 *.lock
 *.log
+composer.phar
